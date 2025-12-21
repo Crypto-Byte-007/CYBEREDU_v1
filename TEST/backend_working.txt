@@ -1,0 +1,82 @@
+[8:29:54 am] Starting compilation in watch mode...
+
+[8:29:59 am] Found 0 errors. Watching for file changes.
+
+(node:18552) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13588) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [NestFactory] Starting Nest application...
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MongooseModule dependencies initialized +16ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] PassportModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MulterModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] ConfigHostModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] ConfigModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] AppConfigModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] ReportsModule dependencies initialized +4ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] UploadsModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] JwtModule dependencies initialized +27ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MongooseCoreModule dependencies initialized +25ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MongooseModule dependencies initialized +22ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MongooseModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] MongooseModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] DatabaseModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] LabsModule dependencies initialized +3ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] HealthModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] NotificationsModule dependencies initialized +2ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 13588  - 21/12/2025, 8:30:01 am     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] AppController {/api/v1}: +17ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1, GET} route +4ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] HealthController {/api/v1/health}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/health, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/health/db, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] AuthController {/api/v1/auth}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/auth/register, POST} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/auth/login, POST} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/auth/logout, POST} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/auth/refresh, POST} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/auth/me, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] UsersController {/api/v1/users}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/users, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/users/:id, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] UserProfileController {/api/v1/users/me}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/users/me, GET} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/users/me, PUT} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/users/me/password, PATCH} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] AdminController {/api/v1/admin/users}: +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users, GET} route +2ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users/:id, GET} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users/:id, PATCH} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users/:id/status, PATCH} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users/:id, DELETE} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/admin/users/:id/restore, PATCH} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] LabsController {/api/v1/labs}: +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/labs, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/labs/:id, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/labs/:id/theory, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/labs/:id/simulation, GET} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/labs/:id/questions, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] ReportsController {/api/v1/reports}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/reports/my, GET} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] NotificationsController {/api/v1/notifications}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/notifications, GET} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/notifications/:id/read, POST} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/notifications/read-all, POST} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/notifications/:id, DELETE} route +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RoutesResolver] FileUploadController {/api/v1/uploads}: +1ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [RouterExplorer] Mapped {/api/v1/uploads/quota, GET} route +0ms
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [DatabaseService] ✅ MongoDB connected successfully
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [DatabaseService] 📊 Database name: cyberedu
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [LabsService] ✅ Labs loaded successfully: 20
+[Nest] 13588  - 21/12/2025, 8:30:02 am     LOG [NestApplication] Nest application successfully started +3ms
+
+  🚀 CyberEdu Backend Started
+  ----------------------------------
+  ✅ Environment: development
+  ✅ API: http://localhost:3000/api/v1
+  ✅ Health: http://localhost:3000/api/v1/health
+  ✅ Database: mongodb://127.0.0.1:27017/cyberedu
+  ✅ Authentication: JWT System Ready
+  ----------------------------------
