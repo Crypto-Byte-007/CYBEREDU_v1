@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberEdu Platform</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="./assets/css/simulation-styles.css">
+    <link rel="stylesheet" href="./assets/css/deluxe.css">
+    <link rel="stylesheet" href="./assets/css/lab-interface.css">
+    <link rel="stylesheet" href="./assets/css/reports.css">
+    <link rel="stylesheet" href="./assets/css/text-fix.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#3c8fe0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="flash-message-container" class="flash-container"></div>
+
+    <!-- Enhanced Global Loader -->
+    <div id="global-loader" class="loader hidden">
+        <div class="spinner"></div>
+        <p class="loader-text">Loading...</p>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav id="main-navbar" class="navbar hidden">
+        <div class="nav-brand">
+            <i class="fas fa-shield-alt"></i>
+            <span>CyberEdu</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('dashboard-page')"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#" onclick="showPage('mylabs-page')"><i class="fas fa-flask"></i> Labs</a>
+            <a href="#" onclick="showPage('reports-page')"><i class="fas fa-chart-bar"></i> Reports</a>
+            <a href="#" onclick="showPage('leaderboard-page')"><i class="fas fa-trophy"></i> Leaderboard</a>
+            <a href="#" onclick="showPage('profile-page')"><i class="fas fa-user"></i> Profile</a>
+        </div>
+        <div class="nav-user">
+            <div class="notification-bell" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="badge">0</span>
+            </div>
+            <div class="user-avatar" onclick="toggleUserMenu()">
+                <span id="user-initials">U</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Dropdown -->
+    <div id="notification-dropdown" class="dropdown hidden">
+        <div class="dropdown-header">
+            <h4>Notifications</h4>
+            <button onclick="markAllRead()" class="btn-link">Mark all read</button>
+        </div>
+        <div id="notification-list" class="notification-list">
+            <!-- Notifications populated by JS -->
+        </div>
+    </div>
+
+    <!-- PAGE CONTAINERS -->
+    <div id="app-root">
+        <!-- Landing Page -->
+        <div id="landing-page" class="page-container active">
+            <div class="landing-hero">
+                <div class="hero-content">
+                    <h1>Master Cybersecurity Through Practice</h1>
+                    <p>Join thousands of students learning cybersecurity through hands-on labs, real-world scenarios, and expert guidance.</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Interactive Labs</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Students</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Success Rate</span>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <button onclick="showPage('login-page')" class="btn btn-primary btn-large">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                        <button onclick="showPage('register-page')" class="btn btn-secondary btn-large">
+                            <i class="fas fa-user-plus"></i> Sign Up Free
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="security-visual">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-section">
+                <h2>Why Choose CyberEdu?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>Hands-On Learning</h3>
+                        <p>Practice with real cybersecurity tools and scenarios</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-certificate"></i>
+                        <h3>Industry Certified</h3>
+                        <p>Earn certificates recognized by top employers</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Expert Instructors</h3>
+                        <p>Learn from cybersecurity professionals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page-container">
+            <div class="auth-container">
+                <div class="auth-form">
+                    <div class="auth-header">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to continue your cybersecurity journey</p>
+                    </div>
+                    <form onsubmit="event.preventDefault(); login();">
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox">
+                                <input type="checkbox" id="remember-me">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" id="login-btn" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" onclick="showPage('register-page')">Sign up here</a></p>
+                        <button onclick="showPage('landing-page')" class="btn-link">← Back to home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register-page" class="page-container">
+            <div class="auth-container">
+                <div class="auth-form">
+                    <div class="auth-header">
+                        <h2>Create Your Account</h2>
+                        <p>Join the cybersecurity learning community</p>
+                    </div>
+                    <form onsubmit="event.preventDefault(); signup();">
+                        <div class="form-group">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email Address</label>
+                            <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" placeholder="Create a strong password" required>
+                            <div class="password-strength">
+                                <div class="strength-bar">
+                                    <div class="strength-fill"></div>
+                                </div>
+                                <span class="strength-text">Password strength</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-role">I am a:</label>
+                            <select id="signup-role" required>
+                                <option value="">Select your role</option>
+                                <option value="student">Student</option>
+                                <option value="instructor">Instructor</option>
+                                <option value="professional">Security Professional</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" required>
+                                <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" onclick="showPage('login-page')">Sign in here</a></p>
+                        <button onclick="showPage('landing-page')" class="btn-link">← Back to home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page-container">
+            <div class="dashboard-header">
+                <div class="welcome-section">
+                    <h1>Welcome back, <span id="dashboard-user-name">User</span>!</h1>
+                    <p>Continue your cybersecurity learning journey</p>
+                </div>
+                <div class="quick-actions">
+                    <button onclick="showPage('mylabs-page')" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Continue Learning
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="completed-labs">0</h3>
+                        <p>Labs Completed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-points">0</h3>
+                        <p>Points Earned</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="study-time">0h</h3>
+                        <p>Study Time</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="avg-score">0%</h3>
+                        <p>Average Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="dashboard-main">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-play-circle"></i> Continue Learning</h3>
+                            <a href="#" onclick="showPage('mylabs-page')">View all labs</a>
+                        </div>
+                        <div id="recent-labs" class="lab-cards">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-chart-bar"></i> Progress Overview</h3>
+                        </div>
+                        <div class="progress-chart">
+                            <canvas id="progress-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sidebar">
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-bell"></i> Recent Activity</h3>
+                        </div>
+                        <div id="activity-feed" class="activity-list">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-header">
+                            <h3><i class="fas fa-medal"></i> Achievements</h3>
+                        </div>
+                        <div id="user-badges" class="badges-grid">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Labs Page -->
+        <div id="mylabs-page" class="page-container">
+            <div class="page-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-flask"></i> Cybersecurity Labs</h1>
+                    <p>Hands-on practice with real-world scenarios</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="lab-search" placeholder="Search labs...">
+                    </div>
+                    <select id="lab-filter" onchange="filterLabs(this.value)">
+                        <option value="all">All Labs</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="labs-categories">
+                <div class="category-tabs">
+                    <button class="tab-btn active" onclick="filterByCategory('all')">All</button>
+                    <button class="tab-btn" onclick="filterByCategory('phishing')">Phishing</button>
+                    <button class="tab-btn" onclick="filterByCategory('email')">Email Security</button>
+                    <button class="tab-btn" onclick="filterByCategory('password')">Passwords</button>
+                    <button class="tab-btn" onclick="filterByCategory('social')">Social Media</button>
+                    <button class="tab-btn" onclick="filterByCategory('device')">Device Security</button>
+                    <button class="tab-btn" onclick="filterByCategory('scam')">Scams</button>
+                    <button class="tab-btn" onclick="filterByCategory('malware')">Malware</button>
+                    <button class="tab-btn" onclick="filterByCategory('wellbeing')">Digital Wellbeing</button>
+                    <button class="tab-btn" onclick="filterByCategory('mobile')">Mobile Security</button>
+                    <button class="tab-btn" onclick="filterByCategory('gaming')">Gaming Security</button>
+                </div>
+            </div>
+
+            <div id="lab-list" class="labs-grid">
+                <!-- Labs will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Lab Instructions Page -->
+        <div id="lab-instructions-page" class="page-container">
+            <div class="lab-header">
+                <div class="lab-nav">
+                    <button onclick="showPage('mylabs-page')" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Labs
+                    </button>
+                    <div class="lab-progress-bar">
+                        <div class="progress-track">
+                            <div id="lab-progress-fill" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span id="lab-progress-text">Step 1 of 4</span>
+                    </div>
+                </div>
+                <div class="lab-info">
+                    <h1 id="lab-title">Lab Title</h1>
+                    <div class="lab-meta">
+                        <span class="lab-difficulty" id="lab-difficulty">Beginner</span>
+                        <span class="lab-time" id="lab-time">45 min</span>
+                        <div class="lab-timer">
+                            <i class="fas fa-clock"></i>
+                            <span id="timer-display">00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lab-content">
+                <div class="lab-main">
+                    <div class="lab-instructions">
+                        <div id="lab-step-content">
+                            <!-- Step content populated by JavaScript -->
+                        </div>
+                        
+                        <div class="lab-actions">
+                            <button id="hint-btn" onclick="getHint()" class="btn btn-outline">
+                                <i class="fas fa-lightbulb"></i> Get Hint
+                            </button>
+                            <button id="prev-step" onclick="previousStep()" class="btn btn-secondary" disabled>
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <button id="next-step" onclick="nextStep()" class="btn btn-primary">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lab-sidebar">
+                    <div class="lab-environment" id="lab-environment">
+                        <!-- Lab environment populated by JavaScript -->
+                    </div>
+                    
+                    <div class="lab-resources">
+                        <h4><i class="fas fa-book"></i> Resources</h4>
+                        <div class="resource-links">
+                            <a href="#" onclick="openResource('nist-guide')">
+                                <i class="fas fa-file-pdf"></i> NIST Guide
+                            </a>
+                            <a href="#" onclick="openResource('tools')">
+                                <i class="fas fa-tools"></i> Security Tools
+                            </a>
+                            <a href="#" onclick="openResource('references')">
+                                <i class="fas fa-link"></i> References
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lab Theory Page -->
+        <div id="lab-theory-page" class="page-container">
+            <div class="theory-header">
+                <button onclick="showPage('mylabs-page')" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Labs
+                </button>
+                <h1>Lab Theory & Background</h1>
+            </div>
+            
+            <div class="theory-content">
+                <div id="lab-specific-theory">
+                    <!-- Theory content populated by JavaScript -->
+                </div>
+                
+                <div class="theory-actions">
+                    <button onclick="startLab()" class="btn btn-primary btn-large">
+                        <i class="fas fa-play"></i> Start Lab
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reports-page" class="page-container">
+            <div class="page-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-chart-bar"></i> Performance Reports</h1>
+                    <p>Track your progress and analyze your performance</p>
+                </div>
+                <div class="header-actions">
+                    <button onclick="generateReport()" class="btn btn-primary">
+                        <i class="fas fa-file-export"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="reports-filters">
+                <select id="report-timeframe">
+                    <option value="week">Last Week</option>
+                    <option value="month">Last Month</option>
+                    <option value="quarter">Last Quarter</option>
+                    <option value="all">All Time</option>
+                </select>
+                <select id="report-type">
+                    <option value="all">All Labs</option>
+                    <option value="completed">Completed Only</option>
+                    <option value="in-progress">In Progress</option>
+                </select>
+            </div>
+
+            <div class="reports-overview">
+                <div class="overview-card">
+                    <h3>Overall Performance</h3>
+                    <div class="performance-chart">
+                        <canvas id="performance-chart" width="300" height="150"></canvas>
+                    </div>
+                </div>
+                <div class="overview-card">
+                    <h3>Skill Breakdown</h3>
+                    <div class="skills-radar">
+                        <canvas id="skills-chart" width="300" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reports-table-container">
+                <table class="reports-table">
+                    <thead>
+                        <tr>
+                            <th>Lab Name</th>
+                            <th>Completion Date</th>
+                            <th>Score</th>
+                            <th>Time Taken</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-table">
+                        <!-- Reports populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Leaderboard Page -->
+        <div id="leaderboard-page" class="page-container">
+            <div class="page-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-trophy"></i> Leaderboard</h1>
+                    <p>See how you rank among your peers</p>
+                </div>
+                <div class="leaderboard-filters">
+                    <select id="leaderboard-timeframe">
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="leaderboard-content">
+                <div class="top-performers">
+                    <div class="podium">
+                        <div class="podium-place second">
+                            <div class="place-number">2</div>
+                            <div class="user-avatar">JS</div>
+                            <div class="user-name">Jane Smith</div>
+                            <div class="user-score">2,450 pts</div>
+                        </div>
+                        <div class="podium-place first">
+                            <div class="place-number">1</div>
+                            <div class="user-avatar">AJ</div>
+                            <div class="user-name">Alex Johnson</div>
+                            <div class="user-score">2,890 pts</div>
+                        </div>
+                        <div class="podium-place third">
+                            <div class="place-number">3</div>
+                            <div class="user-avatar">MB</div>
+                            <div class="user-name">Mike Brown</div>
+                            <div class="user-score">2,120 pts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="leaderboard-table-container">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>User</th>
+                                <th>Points</th>
+                                <th>Labs Completed</th>
+                                <th>Avg Score</th>
+                                <th>Streak</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-table">
+                            <!-- Leaderboard populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page-container">
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        <span id="profile-avatar-text">U</span>
+                        <button class="avatar-edit-btn" onclick="alert('Photo upload feature coming soon! For now, your initials look great.')">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-basic-info">
+                        <h2 id="profile-display-name">User Name</h2>
+                        <p id="profile-display-email">user@example.com</p>
+                        <span class="profile-role" id="profile-display-role">Student</span>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-value" id="profile-labs-completed">0</span>
+                        <span class="stat-label">Labs Completed</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value" id="profile-total-points">0</span>
+                        <span class="stat-label">Total Points</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-value" id="profile-rank">#0</span>
+                        <span class="stat-label">Global Rank</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-main">
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-user"></i> Personal Information</h3>
+                            <button id="edit-profile-btn" onclick="toggleEditMode()" class="btn btn-outline">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                        <div class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-first-name">First Name</label>
+                                    <input type="text" id="profile-first-name" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-last-name">Last Name</label>
+                                    <input type="text" id="profile-last-name" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-email">Email Address</label>
+                                <input type="email" id="profile-email" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-bio">Bio</label>
+                                <textarea id="profile-bio" rows="4" placeholder="Tell us about yourself..." readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-location">Location</label>
+                                <input type="text" id="profile-location" placeholder="City, Country" readonly>
+                            </div>
+                            <div id="profile-edit-buttons" class="form-actions hidden">
+                                <button onclick="saveProfile()" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button onclick="cancelEdit()" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-lock"></i> Security Settings</h3>
+                        </div>
+                        <div class="security-options">
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h4>Password</h4>
+                                    <p>Last changed 30 days ago</p>
+                                </div>
+                                <button onclick="changePassword()" class="btn btn-outline">Change</button>
+                            </div>
+                            <div class="security-item">
+                                <div class="security-info">
+                                    <h4>Two-Factor Authentication</h4>
+                                    <p>Add an extra layer of security</p>
+                                </div>
+                                <button onclick="alert('Two-factor authentication will be available in the next update!')" class="btn btn-outline">Enable</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-sidebar">
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-chart-line"></i> Activity Heatmap</h3>
+                        </div>
+                        <div id="activity-heatmap" class="heatmap-container" style="display: grid; grid-template-columns: repeat(auto-fill, 12px); gap: 2px;">
+                            <!-- Heatmap populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-medal"></i> Achievements</h3>
+                        </div>
+                        <div id="profile-achievements" class="achievements-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <!-- Achievements populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME HUD STYLE LAB INTERFACE -->
+    <div id="lab-interface" class="hidden">
+        <!-- LEFT THEORY PANEL -->
+        <div id="lab-theory-panel" class="lab-left-panel"></div>
+
+        <!-- RIGHT SIDE (TASK + SIMULATION) -->
+        <div class="lab-right-panel">
+            <!-- Current Task Header -->
+            <div id="lab-task-box" class="lab-task-box"></div>
+
+            <!-- Simulation Window -->
+            <div id="lab-simulation-panel" class="lab-sim-box"></div>
+
+            <!-- Tutor Dialogue -->
+            <div id="lab-tutor-box" class="lab-tutor-box"></div>
+
+            <!-- Navigation Buttons -->
+            <div class="lab-nav">
+                <button id="lab-prev-step" class="lab-btn" onclick="previousStep()">Previous</button>
+                <button id="lab-next-step" class="lab-btn primary" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="hint-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lightbulb"></i> Hint</h3>
+                <button class="modal-close" onclick="closeModal('hint-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="hint-content">
+                    <!-- Hint content populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="password-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Change Password</h3>
+                <button class="modal-close" onclick="closeModal('password-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="event.preventDefault(); updatePassword();">
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                        <button type="button" onclick="closeModal('password-modal')" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/modal.js"></script>
+    <script src="./assets/js/stubs.js"></script>
+    <script type="module" src="./assets/js/leaderboard.js"></script>
+    <script type="module" src="./assets/js/ui.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/main.js"></script>
+
+</body>
+</html>

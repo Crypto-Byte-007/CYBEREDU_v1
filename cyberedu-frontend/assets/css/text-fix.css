@@ -1,0 +1,223 @@
+/* Global Text Color Fix */
+* { color: inherit; }
+body { color: #ffffff !important; }
+h1, h2, h3, h4, h5, h6 { color: #ffffff !important; }
+p { color: #b8c5db !important; }
+span { color: inherit !important; }
+label { color: #e0e6ed !important; }
+a { color: #00d4ff !important; }
+button { color: #ffffff !important; background: rgba(30, 42, 71, 0.6) !important; }
+input, select, textarea { color: #ffffff !important; background: rgba(10, 14, 26, 0.8) !important; }
+td { color: #b8c5db !important; }
+th { color: #ffffff !important; }
+.btn { color: #ffffff !important; }
+.btn-outline { background: rgba(30, 42, 71, 0.6) !important; border-color: rgba(0, 212, 255, 0.3) !important; }
+.tab-btn { color: #b8c5db !important; background: transparent !important; }
+.tab-btn.active { color: #00d4ff !important; }
+.modal-content { background: rgba(20, 27, 45, 0.95) !important; }
+.auth-form { background: rgba(20, 27, 45, 0.95) !important; }
+.feature-card { background: rgba(20, 27, 45, 0.8) !important; color: #ffffff !important; }
+.feature-card p { color: #b8c5db !important; }
+.activity-item { background: rgba(30, 42, 71, 0.4) !important; }
+.profile-section { background: rgba(20, 27, 45, 0.6) !important; }
+.overview-card { background: rgba(20, 27, 45, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; }
+.reports-table { background: transparent !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; }
+.reports-table tbody tr { background: rgba(30, 42, 71, 0.3) !important; }
+.reports-table tbody tr:hover { background: rgba(30, 42, 71, 0.5) !important; }
+.reports-table-container { background: rgba(20, 27, 45, 0.6) !important; padding: 1.5rem !important; border-radius: 12px !important; }
+.security-item { background: rgba(30, 42, 71, 0.4) !important; border-color: rgba(0, 212, 255, 0.2) !important; }
+.avatar-edit-btn { background: rgba(0, 212, 255, 0.3) !important; }
+.modal { display: none !important; }
+.modal[style*="display: flex"] { display: flex !important; }
+
+/* Lab Interface Complete Fix */
+#lab-interface { background: #0a0e1a !important; }
+.lab-left-panel { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; }
+.lab-right-panel { background: transparent !important; }
+.lab-task-box { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: #00ff88 !important; }
+.lab-sim-box { background: rgba(20, 27, 45, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: #ffffff !important; }
+.lab-tutor-box { background: rgba(20, 27, 45, 0.7) !important; border-left: 4px solid #00ff88 !important; color: #b8c5db !important; }
+
+/* Lab Simulation Elements */
+.browser-window { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; }
+.url-bar { background: rgba(10, 14, 26, 0.9) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: #ffffff !important; }
+.browser-content { background: rgba(30, 42, 71, 0.4) !important; color: #ffffff !important; }
+.email-client { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; }
+.email-header { background: rgba(10, 14, 26, 0.9) !important; color: #ffffff !important; }
+.email-body { background: rgba(30, 42, 71, 0.4) !important; color: #ffffff !important; }
+.analysis-panel { background: rgba(20, 27, 45, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; }
+.password-tester { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; }
+.strength-meter { background: rgba(30, 42, 71, 0.6) !important; }
+.passphrase-builder { background: rgba(30, 42, 71, 0.4) !important; }
+.social-feed { background: rgba(20, 27, 45, 0.8) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; }
+.post-card { background: rgba(30, 42, 71, 0.5) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: #ffffff !important; }
+.friend-request-card { background: rgba(30, 42, 71, 0.5) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; color: #ffffff !important; }
+.settings-panel { background: rgba(20, 27, 45, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.2) !important; }
+.result-box { background: rgba(30, 42, 71, 0.6) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: #ffffff !important; }
+.result-box.correct { background: rgba(0, 255, 136, 0.2) !important; border-color: #00ff88 !important; color: #00ff88 !important; }
+.result-box.incorrect { background: rgba(255, 51, 102, 0.2) !important; border-color: #ff3366 !important; color: #ff3366 !important; }
+.certificate-viewer { background: rgba(20, 27, 45, 0.9) !important; border: 1px solid rgba(0, 212, 255, 0.3) !important; color: #ffffff !important; }
+.spelling-checker { background: rgba(30, 42, 71, 0.5) !important; color: #ffffff !important; }
+.link-inspector { background: rgba(30, 42, 71, 0.5) !important; color: #ffffff !important; }
+
+/* All Lab Inputs */
+#lab-interface input[type="text"],
+#lab-interface input[type="password"],
+#lab-interface input[type="email"],
+#lab-interface textarea,
+#lab-interface select {
+    background: rgba(10, 14, 26, 0.8) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 212, 255, 0.3) !important;
+}
+#lab-interface input[type="checkbox"] { accent-color: #00d4ff !important; }
+
+/* Lab Buttons */
+#lab-interface .lab-btn,
+#lab-interface .submit-btn,
+#lab-interface .check-btn,
+#lab-interface button { 
+    background: linear-gradient(135deg, #00d4ff 0%, #6366f1 100%) !important; 
+    color: #ffffff !important;
+    border: none !important;
+}
+#lab-interface .lab-btn:hover,
+#lab-interface .submit-btn:hover,
+#lab-interface .check-btn:hover,
+#lab-interface button:hover {
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4) !important;
+}
+
+/* All divs inside lab interface */
+#lab-interface div { 
+    color: inherit !important; 
+    background: transparent !important;
+}
+#lab-interface * { color: inherit !important; }
+
+/* Force dark backgrounds for specific elements */
+#lab-interface .browser-window,
+#lab-interface .email-client,
+#lab-interface .password-tester,
+#lab-interface .social-feed,
+#lab-interface .analysis-panel,
+#lab-interface .settings-panel,
+#lab-interface .certificate-viewer,
+#lab-interface .post-card,
+#lab-interface .friend-request-card {
+    background: rgba(20, 27, 45, 0.8) !important;
+}
+
+#lab-interface .url-bar,
+#lab-interface .email-header,
+#lab-interface .email-body,
+#lab-interface .browser-content,
+#lab-interface .spelling-checker,
+#lab-interface .link-inspector,
+#lab-interface .strength-meter,
+#lab-interface .passphrase-builder {
+    background: rgba(30, 42, 71, 0.5) !important;
+}
+
+/* Override any white backgrounds */
+#lab-interface [style*="background: white"],
+#lab-interface [style*="background: #fff"],
+#lab-interface [style*="background: #ffffff"],
+#lab-interface [style*="background-color: white"],
+#lab-interface [style*="background-color: #fff"],
+#lab-interface [style*="background-color: #ffffff"] {
+    background: rgba(20, 27, 45, 0.8) !important;
+}
+
+/* Theory Panel Boxes */
+.lab-left-panel h3,
+.lab-left-panel h4,
+.lab-left-panel h5 {
+    color: #00d4ff !important;
+    background: transparent !important;
+}
+
+.lab-left-panel p,
+.lab-left-panel ul,
+.lab-left-panel ol,
+.lab-left-panel li {
+    color: #b8c5db !important;
+    background: transparent !important;
+}
+
+.lab-left-panel > div,
+.lab-left-panel section,
+.lab-left-panel article {
+    background: rgba(30, 42, 71, 0.3) !important;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+}
+
+/* Simulation Options/Forms */
+#lab-interface form,
+#lab-interface fieldset,
+#lab-interface .form-group,
+#lab-interface .options,
+#lab-interface .choices {
+    background: rgba(30, 42, 71, 0.4) !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+}
+
+/* Info boxes */
+#lab-interface .info-box,
+#lab-interface .warning-box,
+#lab-interface .tip-box,
+#lab-interface .note-box {
+    background: rgba(30, 42, 71, 0.5) !important;
+    border-left: 4px solid #00d4ff !important;
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
+    color: #b8c5db !important;
+}
+
+/* Checkbox and Radio Options */
+#lab-interface label {
+    background: transparent !important;
+    color: #ffffff !important;
+    display: block !important;
+    padding: 0.5rem !important;
+    margin: 0.5rem 0 !important;
+}
+
+#lab-interface .checkbox-group,
+#lab-interface .radio-group,
+#lab-interface .option-group {
+    background: rgba(30, 42, 71, 0.4) !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+}
+
+/* Question boxes */
+#lab-interface .question,
+#lab-interface .question-box,
+#lab-interface .task-description {
+    background: rgba(30, 42, 71, 0.5) !important;
+    padding: 1rem !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(0, 212, 255, 0.3) !important;
+    color: #ffffff !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Nuclear option - force all backgrounds in lab-sim-box */
+.lab-sim-box * {
+    background: transparent !important;
+}
+
+.lab-sim-box > div,
+.lab-sim-box > section,
+.lab-sim-box > article,
+.lab-sim-box .container,
+.lab-sim-box .wrapper {
+    background: rgba(30, 42, 71, 0.3) !important;
+}

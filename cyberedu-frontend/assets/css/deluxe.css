@@ -1,0 +1,582 @@
+/* Deluxe Simulation UX Pack - Premium Animations & Effects */
+
+/* Smooth fade transitions */
+.fade-in {
+    animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide-in panel animations */
+.slide-right {
+    animation: slideRight 0.4s ease-out forwards;
+}
+@keyframes slideRight {
+    from { transform: translateX(40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.slide-left {
+    animation: slideLeft 0.4s ease-out forwards;
+}
+@keyframes slideLeft {
+    from { transform: translateX(-40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Enhanced shake animation for wrong answers */
+.shake {
+    animation: shakeAnim 0.4s ease-in-out;
+}
+@keyframes shakeAnim {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-8px); }
+    40%  { transform: translateX(8px); }
+    60%  { transform: translateX(-6px); }
+    80%  { transform: translateX(6px); }
+    100% { transform: translateX(0); }
+}
+
+/* Glowing cyber terminal */
+.sim-terminal {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    color: #39ff14;
+    padding: 20px;
+    border-radius: 12px;
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    border: 1px solid #1f6feb;
+    box-shadow: 
+        0 0 20px rgba(57, 255, 20, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+    height: 250px;
+    position: relative;
+}
+
+.sim-terminal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #39ff14, transparent);
+    animation: scanline 2s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.terminal-line {
+    margin: 4px 0;
+    opacity: 0;
+    animation: terminalType 0.5s ease forwards;
+}
+
+@keyframes terminalType {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.blink-cursor {
+    border-right: 3px solid #39ff14;
+    animation: cursorBlink 0.7s infinite;
+}
+@keyframes cursorBlink {
+    0%, 50% { border-color: #39ff14; }
+    51%, 100% { border-color: transparent; }
+}
+
+/* Tutor mood system */
+.tutor-happy {
+    border-left: 5px solid #4caf50;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), transparent);
+}
+.tutor-strict {
+    border-left: 5px solid #ffcc00;
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), transparent);
+}
+.tutor-angry {
+    border-left: 5px solid #ff4444;
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), transparent);
+}
+
+/* XP popup animation */
+.xp-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 24px;
+    z-index: 10000;
+    animation: xpRise 1.5s ease-out forwards;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+@keyframes xpRise {
+    0% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5); 
+    }
+    20% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.2); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translate(-50%, -80px) scale(1); 
+    }
+}
+
+/* Enhanced step progress bar */
+.step-progress {
+    height: 8px;
+    background: linear-gradient(90deg, #1a1a1a, #2a2a2a);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.step-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1f6feb, #39ff14, #4caf50);
+    width: 0;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+.step-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+    animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-20px); }
+    100% { transform: translateX(20px); }
+}
+
+/* Button hover effects */
+.sim-submit {
+    background: linear-gradient(135deg, #1f6feb, #0969da);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sim-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.sim-submit:hover::before {
+    left: 100%;
+}
+
+.sim-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(31, 111, 235, 0.3);
+}
+
+.sim-submit:active {
+    transform: translateY(0);
+}
+
+/* Loading shimmer skeleton */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Enhanced input focus effects */
+.sim-input {
+    transition: all 0.3s ease;
+    border: 2px solid #333;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sim-input:focus {
+    border-color: #1f6feb;
+    box-shadow: 
+        0 0 0 3px rgba(31, 111, 235, 0.1),
+        0 0 20px rgba(31, 111, 235, 0.2);
+    transform: scale(1.02);
+}
+
+/* Pulse animation for important elements */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(31, 111, 235, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(31, 111, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(31, 111, 235, 0); }
+}
+
+/* Success/Error state animations */
+.success-glow {
+    animation: successGlow 0.6s ease-out;
+}
+
+@keyframes successGlow {
+    0% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+}
+
+.error-glow {
+    animation: errorGlow 0.6s ease-out;
+}
+
+@keyframes errorGlow {
+    0% { box-shadow: 0 0 5px rgba(255, 68, 68, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(255, 68, 68, 0.5); }
+}
+
+/* Typing indicator */
+.typing-indicator {
+    display: inline-block;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator::after {
+    content: '|';
+    animation: blink 1s infinite;
+}
+
+@keyframes typing {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Matrix-style background effect */
+.matrix-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.1;
+    background-image: 
+        radial-gradient(circle at 25% 25%, #39ff14 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, #1f6feb 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: matrixMove 20s linear infinite;
+}
+
+@keyframes matrixMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50px); }
+}
+
+/* Enhanced lab interface */
+#lab-interface {
+    position: relative;
+    overflow: hidden;
+}
+
+#lab-interface::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(31, 111, 235, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.lab-left-panel,
+.lab-right-panel {
+    position: relative;
+    z-index: 1;
+}
+
+/* Matrix Background Effects */
+.matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.matrix-char {
+    position: absolute;
+    color: #00ff41;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    font-weight: bold;
+    animation: matrixDrop 4s linear infinite;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+@keyframes matrixDrop {
+    0% { 
+        transform: translateY(-100px); 
+        opacity: 1; 
+    }
+    90% { 
+        opacity: 1; 
+    }
+    100% { 
+        transform: translateY(100vh); 
+        opacity: 0; 
+    }
+}
+
+/* Achievement Popup */
+.achievement-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border: 2px solid #ffd700;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    animation: achievementSlide 0.5s ease-out;
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.3),
+        0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 10002;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+@keyframes achievementSlide {
+    from { 
+        transform: translateX(100%) scale(0.8); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateX(0) scale(1); 
+        opacity: 1; 
+    }
+}
+
+@keyframes slideOut {
+    to { 
+        transform: translateX(100%) scale(0.8); 
+        opacity: 0; 
+    }
+}
+
+.achievement-icon {
+    font-size: 2.5rem;
+    animation: bounce 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+.achievement-content h3 {
+    margin: 0 0 5px 0;
+    color: #ffd700;
+    font-size: 1.1rem;
+}
+
+.achievement-content strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.achievement-content p {
+    margin: 0 0 8px 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.xp-reward {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Level Up Popup */
+.level-up-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border: 3px solid #9932cc;
+    border-radius: 20px;
+    padding: 40px;
+    color: white;
+    text-align: center;
+    animation: levelUpIn 0.6s ease-out;
+    box-shadow: 
+        0 0 30px rgba(153, 50, 204, 0.5),
+        0 0 60px rgba(153, 50, 204, 0.3);
+    z-index: 10003;
+}
+
+@keyframes levelUpIn {
+    from { 
+        transform: translate(-50%, -50%) scale(0.5) rotate(-10deg); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translate(-50%, -50%) scale(1) rotate(0deg); 
+        opacity: 1; 
+    }
+}
+
+@keyframes levelUpOut {
+    to { 
+        transform: translate(-50%, -50%) scale(1.2) rotate(5deg); 
+        opacity: 0; 
+    }
+}
+
+.level-up-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, #ffd700, #ff6347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.level-badge {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 auto 15px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    animation: levelBadgePulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes levelBadgePulse {
+    from { transform: scale(1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+    to { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
+}
+
+.level-up-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    color: #ffd700;
+}
+
+.level-up-content p {
+    margin: 0;
+    color: #ccc;
+}
+
+/* Notification toast animations */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 10001;
+    animation: toastSlide 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes toastSlide {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.toast-success { background: linear-gradient(135deg, #4caf50, #45a049); }
+.toast-error { background: linear-gradient(135deg, #ff4444, #cc0000); }
+.toast-info { background: linear-gradient(135deg, #1f6feb, #0969da); }
+
+/* Dark mode enhancements */
+.dark-mode .sim-terminal {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-color: #39ff14;
+}
+
+.dark-mode .step-progress {
+    background: linear-gradient(90deg, #0a0a0a, #1a1a1a);
+}
+
+/* Mobile responsive animations */
+@media (max-width: 768px) {
+    .slide-right, .slide-left {
+        animation-duration: 0.2s;
+    }
+    
+    .xp-popup {
+        font-size: 18px;
+    }
+    
+    .sim-terminal {
+        height: 200px;
+        padding: 15px;
+    }
+}

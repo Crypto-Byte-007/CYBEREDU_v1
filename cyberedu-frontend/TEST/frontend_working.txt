@@ -1,0 +1,6 @@
+C:\Users\arumu\CYBEREDU\cyberedu-frontend>python -m http.server 8080
+
+
+Serving HTTP on :: port 8080 (http://[::]:8080/) ...
+::1 - - [21/Dec/2025 09:03:56] "GET / HTTP/1.1" 304 -
+::1 - - [21/Dec/2025 09:03:57] "GET / HTTP/1.1" 304 -

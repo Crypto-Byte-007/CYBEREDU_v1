@@ -1,0 +1,17 @@
+<div class="lab-card card">
+    <h3 class="lab-title">{{title}}</h3>
+    <p class="lab-description">{{description}}</p>
+    <div class="lab-meta">
+        <span class="difficulty">{{difficulty}}</span>
+        <span class="time">{{estimatedTime}}</span>
+    </div>
+    <div class="lab-progress">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{progress}}%"></div>
+        </div>
+        <span>{{progress}}% Complete</span>
+    </div>
+    <button class="btn btn-primary" onclick="openLab('{{id}}')">
+        {{#if progress}}Continue{{else}}Start{{/if}}
+    </button>
+</div>
