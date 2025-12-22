@@ -1,21 +1,41 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    /* Language & Environment */
     "target": "ES2021",
-    "sourceMap": true,
+    "module": "commonjs",
+    "lib": ["ES2021"],
+    "moduleResolution": "node",
+
+    /* Paths */
+    "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
+
+    /* Decorators (REQUIRED for NestJS) */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    /* JS Interop */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    /* Output */
+    "declaration": false,
+    "removeComments": true,
+    "sourceMap": true,
+
+    /* Type Checking */
+    "strict": false,
     "strictNullChecks": false,
     "noImplicitAny": false,
-    "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
-  }
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Performance */
+    "incremental": true
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts"]
 }
