@@ -28,26 +28,24 @@
     <!-- Navigation Bar -->
     <nav id="main-navbar" class="navbar hidden">
         <div class="nav-brand">
-            <i class="fas fa-shield-alt"></i>
-            <span>CyberEdu</span>
+            <h2>CyberEdu</h2>
         </div>
+
         <div class="nav-links">
-            <a href="#" onclick="showPage('dashboard-page')"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="#" onclick="showPage('mylabs-page')"><i class="fas fa-flask"></i> Labs</a>
-            <a href="#" onclick="showPage('reports-page')"><i class="fas fa-chart-bar"></i> Reports</a>
-            <a href="#" onclick="showPage('leaderboard-page')"><i class="fas fa-trophy"></i> Leaderboard</a>
-            <a href="#" onclick="showPage('profile-page')"><i class="fas fa-user"></i> Profile</a>
+            <a href="#dashboard-page" onclick="showPage('dashboard-page')">Dashboard</a>
+            <a href="#mylabs-page" onclick="showPage('mylabs-page')">Labs</a>
+            <a href="#reports-page" onclick="showPage('reports-page')">Reports</a>
+            <a href="#profile-page" onclick="showPage('profile-page')">Profile</a>
         </div>
-        <div class="nav-user">
-            <div class="notification-bell" onclick="toggleNotifications()">
-                <i class="fas fa-bell"></i>
-                <span id="notification-badge" class="badge">0</span>
-            </div>
-            <div class="user-avatar" onclick="toggleUserMenu()">
-                <span id="user-initials">U</span>
-            </div>
+
+        <!-- LOGOUT BUTTON -->
+        <div class="nav-actions">
+            <button id="logoutBtn" onclick="logout()" class="logout-btn">
+                Logout
+            </button>
         </div>
     </nav>
+
 
     <!-- Notification Dropdown -->
     <div id="notification-dropdown" class="dropdown hidden">
