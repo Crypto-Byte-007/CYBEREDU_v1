@@ -1,25 +1,32 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AppConfigService } from '../config/config.service';
 import { DatabaseService } from './database.service';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      useFactory: async () => {
-        const uri = process.env.MONGODB_URI;
+      inject: [AppConfigService],
+      useFactory: (configService: AppConfigService) => ({
+        uri: configService.database.uri,
+        directConnection: false,
+        serverSelectionTimeoutMS: 10000,
+        retryAttempts: 3,
+        retryDelay: 1000,
+        connectionFactory: (connection: any) => {
+          connection.on('connected', () => {
+            console.log(
+              `✅ MongoDB connected to ${connection.db.databaseName}`,
+            );
+          });
 
-        if (!uri) {
-          throw new Error('❌ MONGODB_URI is not defined');
-        }
+          connection.on('error', (error: any) => {
+            console.error('❌ MongoDB connection error:', error);
+          });
 
-        console.log('🔥 Connecting to MongoDB:', uri.replace(/\/\/.*@/, '//***@'));
-
-        return {
-          uri,
-          retryAttempts: 5,
-          retryDelay: 3000,
-        };
-      },
+          return connection;
+        },
+      }),
     }),
   ],
   providers: [DatabaseService],
