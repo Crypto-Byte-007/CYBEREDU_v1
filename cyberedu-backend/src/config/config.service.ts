@@ -38,19 +38,18 @@ export class AppConfigService {
   =============================== */
 
   get database() {
-    const uri = this.config.get<string>('MONGODB_URI');
+  return {
+    uri:
+      this.configService.get<string>('MONGODB_URI') ||
+      this.configService.get<string>('database.uri') ||
+      'mongodb://localhost:27017/cyberedu',
 
-    // 🚨 HARD FAIL (NO FALLBACKS)
-    if (!uri) {
-      throw new Error(
-        '❌ MONGODB_URI is not set. Add it in Railway Variables.',
-      );
-    }
+    testUri:
+      this.configService.get<string>('MONGODB_TEST_URI') ||
+      'mongodb://localhost:27017/cyberedu_test',
+  };
+}
 
-    console.log('🔥 Using MongoDB URI:', uri.replace(/\/\/.*@/, '//***@'));
-
-    return { uri };
-  }
 
   /* ===============================
      JWT
