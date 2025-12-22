@@ -7,12 +7,21 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   const configService = app.get(AppConfigService);
 
-  // Global prefix
+  /**
+   * =========================
+   * GLOBAL API PREFIX
+   * =========================
+   */
   app.setGlobalPrefix(configService.apiPrefix);
 
-  // Global pipes
+  /**
+   * =========================
+   * GLOBAL VALIDATION
+   * =========================
+   */
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -21,31 +30,61 @@ async function bootstrap() {
     }),
   );
 
-  // Global filters
+  /**
+   * =========================
+   * GLOBAL FILTERS
+   * =========================
+   */
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  // Global interceptors
+  /**
+   * =========================
+   * GLOBAL INTERCEPTORS
+   * =========================
+   */
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-  // CORS
+  /**
+   * =========================
+   * CORS CONFIGURATION
+   * =========================
+   * - Local frontend
+   * - Netlify frontend
+   */
   app.enableCors({
-    origin: configService.isDevelopment ? '*' : [],
+    origin: [
+      'http://localhost:51442', // local frontend (serve)
+      'http://localhost:3000',  // optional local testing
+      'https://nullcyberedu.netlify.app', // 🔴 REPLACE THIS
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
-  // Start server
-  const port = configService.port;
+  /**
+   * =========================
+   * START SERVER
+   * =========================
+   * Railway injects PORT automatically
+   */
+  const port = configService.port || 3000;
   await app.listen(port);
-  
+
+  /**
+   * =========================
+   * STARTUP LOG
+   * =========================
+   */
   console.log(`
-  🚀 CyberEdu Backend Started
-  ----------------------------------
-  ✅ Environment: ${configService.nodeEnv}
-  ✅ API: http://localhost:${port}${configService.apiPrefix}
-  ✅ Health: http://localhost:${port}${configService.apiPrefix}/health
-  ✅ Database: ${configService.database.uri}
-  ✅ Authentication: JWT System Ready
-  ----------------------------------
+🚀 CyberEdu Backend Started
+----------------------------------
+✅ Environment : ${configService.nodeEnv}
+✅ API         : http://localhost:${port}${configService.apiPrefix}
+✅ Health      : http://localhost:${port}${configService.apiPrefix}/health
+✅ Database    : ${configService.database.uri}
+✅ Auth        : JWT Ready
+----------------------------------
   `);
 }
 
