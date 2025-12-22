@@ -5,79 +5,60 @@ import { ConfigService } from '@nestjs/config';
 export class AppConfigService {
   constructor(private readonly config: ConfigService) {}
 
-  /* ===============================
-     ENVIRONMENT
-  =============================== */
-
   get nodeEnv(): string {
-    return this.config.get<string>('NODE_ENV', 'development');
+    return this.config.get<string>('nodeEnv', 'development');
+  }
+
+  get port(): number {
+    return this.config.get<number>('port', 3000);
+  }
+
+  get apiPrefix(): string {
+    return this.config.get<string>('apiPrefix', '/api/v1');
   }
 
   get isDevelopment(): boolean {
-    return this.nodeEnv !== 'production';
+    return this.nodeEnv === 'development';
   }
 
   get isProduction(): boolean {
     return this.nodeEnv === 'production';
   }
 
-  /* ===============================
-     SERVER
-  =============================== */
-
-  get port(): number {
-    return Number(this.config.get<number>('PORT', 3000));
-  }
-
-  get apiPrefix(): string {
-    return '/api/v1';
-  }
-
-  /* ===============================
-     DATABASE
-  =============================== */
-
   get database() {
-  return {
-    uri:
-      this.configService.get<string>('MONGODB_URI') ||
-      this.configService.get<string>('database.uri') ||
-      'mongodb://localhost:27017/cyberedu',
-
-    testUri:
-      this.configService.get<string>('MONGODB_TEST_URI') ||
-      'mongodb://localhost:27017/cyberedu_test',
-  };
-}
-
-
-  /* ===============================
-     JWT
-  =============================== */
-
-  get jwt() {
-    const secret = this.config.get<string>('JWT_SECRET');
-
-    if (!secret) {
-      throw new Error(
-        '❌ JWT_SECRET is not set. Add it in Railway Variables.',
-      );
-    }
-
     return {
-      secret,
-      expiresIn: '1h',
+      uri: this.config.get<string>(
+        'database.uri',
+        'mongodb://localhost:27017/cyberedu',
+      ),
+      testUri: this.config.get<string>(
+        'database.testUri',
+        'mongodb://localhost:27017/cyberedu_test',
+      ),
     };
   }
 
-  /* ===============================
-     LOGGING
-  =============================== */
+  get jwt() {
+    return {
+      secret: this.config.get<string>(
+        'jwt.secret',
+        'change_this_in_production',
+      ),
+      accessExpiration: this.config.get<string>(
+        'jwt.accessExpiration',
+        '15m',
+      ),
+      refreshExpiration: this.config.get<string>(
+        'jwt.refreshExpiration',
+        '7d',
+      ),
+    };
+  }
 
   get logging() {
     return {
-      level: this.config.get<string>('LOG_LEVEL', 'info'),
-      logToFile: false,
+      level: this.config.get<string>('logging.level', 'info'),
+      logToFile: this.config.get<boolean>('logging.logToFile', false),
     };
   }
 }
