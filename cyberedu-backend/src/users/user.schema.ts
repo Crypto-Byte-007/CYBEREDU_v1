@@ -22,7 +22,7 @@ export enum UserRole {
   },
 })
 export class User {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, lowercase: true, trim: true })
   email: string;
 
   @Prop({ required: true })
@@ -75,7 +75,6 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// Indexes
-UserSchema.index({ email: 1 }, { unique: true });
+// ✅ KEEP ONLY NON-DUPLICATE INDEXES
 UserSchema.index({ role: 1 });
 UserSchema.index({ isActive: 1 });
