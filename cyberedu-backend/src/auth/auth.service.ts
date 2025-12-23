@@ -142,44 +142,29 @@ export class AuthService {
 
   // ================= TOKEN HELPERS =================
   private async generateTokens(user: UserDocument): Promise<Tokens> {
-    const payload: AppJwtPayload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
+  const payload = {
+    sub: user.id,
+    email: user.email,
+    role: user.role,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  };
 
-    const accessToken = await this.jwtService.signAsync(payload, {
+  const accessToken = await this.jwtService.signAsync(
+    payload as Record<string, any>,
+    {
       secret: this.configService.jwt.secret,
-      expiresIn: this.configService.jwt.accessExpiration,
-    });
+      expiresIn: this.configService.jwt.accessExpiration as any,
+    },
+  );
 
-    const refreshToken = await this.jwtService.signAsync(payload, {
+  const refreshToken = await this.jwtService.signAsync(
+    payload as Record<string, any>,
+    {
       secret: this.configService.jwt.secret,
-      expiresIn: this.configService.jwt.refreshExpiration,
-    });
+      expiresIn: this.configService.jwt.refreshExpiration as any,
+    },
+  );
 
-    return { accessToken, refreshToken };
-  }
-
-  private async updateRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ): Promise<void> {
-    const hashedRefreshToken = await PasswordUtil.hash(refreshToken);
-    await this.userModel.findByIdAndUpdate(userId, {
-      refreshToken: hashedRefreshToken,
-    });
-  }
-
-  private sanitizeUser(user: UserDocument): any {
-    const obj = user.toObject();
-    delete obj.password;
-    delete obj.refreshToken;
-    delete obj.verificationToken;
-    delete obj.passwordResetToken;
-    delete obj.passwordResetExpires;
-    return obj;
-  }
+  return { accessToken, refreshToken };
 }
