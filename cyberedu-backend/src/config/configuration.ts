@@ -2,29 +2,14 @@
 
 export default () => {
   const nodeEnv = process.env.NODE_ENV || 'development';
-  const isProduction = nodeEnv === 'production';
 
   const mongoUri =
     process.env.MONGODB_URI ||
     process.env.MONGO_URL ||
     'mongodb://127.0.0.1:27017/cyberedu';
 
-  const jwtSecret =
-    process.env.JWT_SECRET || 'change_this_in_production';
-
-  // ✅ Soft validation (no crash loops)
-  if (isProduction) {
-    if (!process.env.MONGODB_URI) {
-      console.warn(
-        '⚠️ WARNING: MONGODB_URI not set explicitly, using fallback',
-      );
-    }
-
-    if (!process.env.JWT_SECRET) {
-      console.warn(
-        '⚠️ WARNING: JWT_SECRET not set explicitly',
-      );
-    }
+  if (!mongoUri) {
+    throw new Error('MongoDB URI is not configured');
   }
 
   return {
@@ -40,7 +25,8 @@ export default () => {
     },
 
     jwt: {
-      secret: jwtSecret,
+      secret:
+        process.env.JWT_SECRET || 'dev_secret_only',
       accessExpiration:
         process.env.JWT_ACCESS_EXPIRATION || '15m',
       refreshExpiration:
