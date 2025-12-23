@@ -9,10 +9,15 @@ import { DatabaseService } from './database.service';
       inject: [AppConfigService],
       useFactory: (configService: AppConfigService) => ({
         uri: configService.database.uri,
+
+        // 🔥 IMPORTANT FIX: disable auto index in production
+        autoIndex: configService.isDevelopment,
+
         directConnection: false,
         serverSelectionTimeoutMS: 10000,
         retryAttempts: 3,
         retryDelay: 1000,
+
         connectionFactory: (connection: any) => {
           connection.on('connected', () => {
             console.log(
