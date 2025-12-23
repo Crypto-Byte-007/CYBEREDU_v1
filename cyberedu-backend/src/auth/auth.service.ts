@@ -15,9 +15,6 @@ import { PasswordUtil } from '../common/utils/password.util';
 import { Tokens } from './interfaces/tokens.interface';
 import { AppConfigService } from '../config/config.service';
 
-/**
- * 🔐 Custom JWT payload for CyberEdu
- */
 interface AppJwtPayload {
   sub: string;
   email: string;
@@ -79,7 +76,6 @@ export class AuthService {
 
     const user = await this.userModel.findOne({ email });
     if (!user) {
-      this.logger.warn(`Login failed: user not found (${email})`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -93,7 +89,6 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      this.logger.warn(`Login failed: wrong password (${email})`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -117,7 +112,7 @@ export class AuthService {
     return { message: 'Logout successful' };
   }
 
-  // ================= REFRESH TOKENS =================
+  // ================= REFRESH =================
   async refreshTokens(userId: string, refreshToken: string): Promise<Tokens> {
     const user = await this.userModel.findById(userId);
 
@@ -125,12 +120,12 @@ export class AuthService {
       throw new UnauthorizedException('Access denied');
     }
 
-    const refreshTokenMatches = await PasswordUtil.compare(
+    const matches = await PasswordUtil.compare(
       refreshToken,
       user.refreshToken,
     );
 
-    if (!refreshTokenMatches) {
+    if (!matches) {
       throw new UnauthorizedException('Access denied');
     }
 
@@ -140,31 +135,52 @@ export class AuthService {
     return tokens;
   }
 
-  // ================= TOKEN HELPERS =================
+  // ================= JWT HELPERS =================
   private async generateTokens(user: UserDocument): Promise<Tokens> {
-  const payload = {
-    sub: user.id,
-    email: user.email,
-    role: user.role,
-    firstName: user.firstName,
-    lastName: user.lastName,
-  };
+    const payload: AppJwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
 
-  const accessToken = await this.jwtService.signAsync(
-    payload as Record<string, any>,
-    {
-      secret: this.configService.jwt.secret,
-      expiresIn: this.configService.jwt.accessExpiration as any,
-    },
-  );
+    const accessToken = await this.jwtService.signAsync(
+      payload as Record<string, any>,
+      {
+        secret: this.configService.jwt.secret,
+        expiresIn: this.configService.jwt.accessExpiration as any,
+      },
+    );
 
-  const refreshToken = await this.jwtService.signAsync(
-    payload as Record<string, any>,
-    {
-      secret: this.configService.jwt.secret,
-      expiresIn: this.configService.jwt.refreshExpiration as any,
-    },
-  );
+    const refreshToken = await this.jwtService.signAsync(
+      payload as Record<string, any>,
+      {
+        secret: this.configService.jwt.secret,
+        expiresIn: this.configService.jwt.refreshExpiration as any,
+      },
+    );
 
-  return { accessToken, refreshToken };
+    return { accessToken, refreshToken };
+  }
+
+  private async updateRefreshToken(
+    userId: string,
+    refreshToken: string,
+  ): Promise<void> {
+    const hashed = await PasswordUtil.hash(refreshToken);
+    await this.userModel.findByIdAndUpdate(userId, {
+      refreshToken: hashed,
+    });
+  }
+
+  private sanitizeUser(user: UserDocument): any {
+    const obj = user.toObject();
+    delete obj.password;
+    delete obj.refreshToken;
+    delete obj.verificationToken;
+    delete obj.passwordResetToken;
+    delete obj.passwordResetExpires;
+    return obj;
+  }
 }
