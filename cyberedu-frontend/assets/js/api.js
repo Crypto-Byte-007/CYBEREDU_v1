@@ -35,7 +35,7 @@ class ApiService {
         headers,
       });
 
-      // Token expired
+      // Access token expired
       if (response.status === 401 && !options._retry) {
         return this.handleUnauthorized(endpoint, options);
       }
@@ -64,17 +64,16 @@ class ApiService {
     this.isRefreshing = true;
 
     try {
-      const tokens = await this.refreshAccessToken();
+      const response = await this.refreshAccessToken();
+
+      // 🔥 FIX: backend sends tokens INSIDE data.tokens
+      const tokens = response.tokens;
 
       this.accessToken = tokens.accessToken;
-      if (tokens.refreshToken) {
-        this.refreshToken = tokens.refreshToken;
-      }
+      this.refreshToken = tokens.refreshToken;
 
       localStorage.setItem("accessToken", this.accessToken);
-      if (this.refreshToken) {
-        localStorage.setItem("refreshToken", this.refreshToken);
-      }
+      localStorage.setItem("refreshToken", this.refreshToken);
 
       this.processQueue();
 
@@ -108,7 +107,9 @@ class ApiService {
     }
 
     const data = await response.json();
-    return data.data || data;
+
+    // 🔥 FIX: always return data.data
+    return data.data;
   }
 
   processQueue() {
@@ -185,7 +186,7 @@ class ApiService {
   }
 
   // ================================
-  // File upload (NO cloning FormData)
+  // File upload
   // ================================
   async uploadFile(endpoint, formData) {
     const headers = {};
@@ -219,10 +220,21 @@ const api = new ApiService();
 export default api;
 
 // ================================
-// Legacy helpers (safe)
+// Legacy helpers (SAFE)
 // ================================
-export const loginAPI = (email, password) =>
-  api.post("/auth/login", { email, password });
+export const loginAPI = async (email, password) => {
+  const res = await api.post("/auth/login", { email, password });
+
+  // 🔥 STORE TOKENS CORRECTLY
+  localStorage.setItem("accessToken", res.data.tokens.accessToken);
+  localStorage.setItem("refreshToken", res.data.tokens.refreshToken);
+  localStorage.setItem("user", JSON.stringify(res.data.user));
+
+  api.accessToken = res.data.tokens.accessToken;
+  api.refreshToken = res.data.tokens.refreshToken;
+
+  return res;
+};
 
 export const registerAPI = (data) =>
   api.post("/auth/register", data);
