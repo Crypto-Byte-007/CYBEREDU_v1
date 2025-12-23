@@ -20,7 +20,7 @@ export enum UserStatus {
 @Schema({
   timestamps: true,
   toJSON: {
-    transform: (doc, ret: any) => {
+    transform: (_doc, ret: any) => {
       delete ret.password;
       delete ret.refreshToken;
       delete ret.verificationToken;
@@ -32,7 +32,8 @@ export enum UserStatus {
   },
 })
 export class User {
-  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  // ❌ REMOVED unique:true HERE
+  @Prop({ required: true, lowercase: true, trim: true })
   email: string;
 
   @Prop({ required: true })
@@ -133,7 +134,9 @@ export class User {
   }
 
   get isLocked(): boolean {
-    return this.metadata?.lockedUntil ? this.metadata.lockedUntil > new Date() : false;
+    return this.metadata?.lockedUntil
+      ? this.metadata.lockedUntil > new Date()
+      : false;
   }
 
   createdAt: Date;
@@ -141,6 +144,10 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+/* ======================
+   INDEXES (SINGLE SOURCE)
+====================== */
 
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ role: 1 });
