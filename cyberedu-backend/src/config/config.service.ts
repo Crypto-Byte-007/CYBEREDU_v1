@@ -1,3 +1,5 @@
+// src/config/config.service.ts
+
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -6,7 +8,15 @@ export class AppConfigService {
   constructor(private readonly config: ConfigService) {}
 
   get nodeEnv(): string {
-    return this.config.get<string>('nodeEnv', 'development');
+    return this.config.get<string>('nodeEnv')!;
+  }
+
+  get isProduction(): boolean {
+    return this.nodeEnv === 'production';
+  }
+
+  get isDevelopment(): boolean {
+    return this.nodeEnv === 'development';
   }
 
   get port(): number {
@@ -17,41 +27,22 @@ export class AppConfigService {
     return this.config.get<string>('apiPrefix', '/api/v1');
   }
 
-  get isDevelopment(): boolean {
-    return this.nodeEnv === 'development';
-  }
-
-  get isProduction(): boolean {
-    return this.nodeEnv === 'production';
-  }
-
   get database() {
     return {
-      uri: this.config.get<string>(
-        'database.uri',
-        'mongodb://localhost:27017/cyberedu',
-      ),
-      testUri: this.config.get<string>(
-        'database.testUri',
-        'mongodb://localhost:27017/cyberedu_test',
-      ),
+      uri: this.config.get<string>('database.uri')!,
+      testUri: this.config.get<string>('database.testUri')!,
     };
   }
 
   get jwt() {
     return {
-      secret: this.config.get<string>(
-        'jwt.secret',
-        'change_this_in_production',
-      ),
+      secret: this.config.get<string>('jwt.secret')!,
       accessExpiration: this.config.get<string>(
         'jwt.accessExpiration',
-        '15m',
-      ),
+      )!,
       refreshExpiration: this.config.get<string>(
         'jwt.refreshExpiration',
-        '7d',
-      ),
+      )!,
     };
   }
 
