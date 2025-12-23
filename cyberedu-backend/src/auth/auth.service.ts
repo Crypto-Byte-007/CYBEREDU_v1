@@ -17,7 +17,6 @@ import { AppConfigService } from '../config/config.service';
 
 /**
  * 🔐 Custom JWT payload for CyberEdu
- * (DO NOT name this JwtPayload – it conflicts with jsonwebtoken)
  */
 interface AppJwtPayload {
   sub: string;
@@ -84,7 +83,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (user.isActive === false) {
+    if (!user.isActive) {
       throw new UnauthorizedException('Account is deactivated');
     }
 
@@ -142,8 +141,8 @@ export class AuthService {
   }
 
   // ================= TOKEN HELPERS =================
-    private async generateTokens(user: UserDocument): Promise<Tokens> {
-    const payload = {
+  private async generateTokens(user: UserDocument): Promise<Tokens> {
+    const payload: AppJwtPayload = {
       sub: user.id,
       email: user.email,
       role: user.role,
@@ -153,11 +152,12 @@ export class AuthService {
 
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.jwt.secret,
-      expiresIn: this.config.jwt.accessExpiration,
+      expiresIn: this.configService.jwt.accessExpiration,
+    });
 
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.jwt.secret,
-      expiresIn: '7d' as any, // ✅ FINAL FIX
+      expiresIn: this.configService.jwt.refreshExpiration,
     });
 
     return { accessToken, refreshToken };
