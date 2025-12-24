@@ -145,19 +145,21 @@ export class AuthService {
       lastName: user.lastName,
     };
 
+    // 🔐 ACCESS TOKEN
     const accessToken = await this.jwtService.signAsync(
       payload as Record<string, any>,
       {
-        secret: this.configService.jwt.secret,
-        expiresIn: this.configService.jwt.accessExpiration as any,
+        secret: this.configService.jwt.accessSecret,
+        expiresIn: this.configService.jwt.accessExpiresIn,
       },
     );
 
+    // 🔐 REFRESH TOKEN (SEPARATE SECRET)
     const refreshToken = await this.jwtService.signAsync(
-      payload as Record<string, any>,
+      { sub: user.id } as Record<string, any>,
       {
-        secret: this.configService.jwt.secret,
-        expiresIn: this.configService.jwt.refreshExpiration as any,
+        secret: this.configService.jwt.refreshSecret,
+        expiresIn: this.configService.jwt.refreshExpiresIn,
       },
     );
 
