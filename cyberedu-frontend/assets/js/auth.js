@@ -2,13 +2,14 @@ import api from "./api.js";
 import { showFlashMessage } from "./flash.js";
 
 // ============================
-// GLOBAL SESSION TRACKER
+// SECURE AUTH SESSION HANDLER
 // ============================
 export const auth = {
     user: null,
 
     isAuthenticated() {
-        return !!localStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
+        return typeof token === "string" && token.length > 20;
     },
 
     // ============================
@@ -16,35 +17,45 @@ export const auth = {
     // ============================
     async login() {
         try {
-            const email = document.getElementById("login-email").value.trim();
-            const password = document.getElementById("login-password").value.trim();
+            const emailEl = document.getElementById("login-email");
+            const passEl = document.getElementById("login-password");
 
-            const res = await api.post("/auth/login", { email, password });
-            const data = res.data || res;
-
-            const tokens = data.tokens;
-            const user = data.user;
-
-            if (!tokens || !tokens.accessToken) {
-                showFlashMessage("Invalid login response", "error");
+            if (!emailEl || !passEl) {
+                showFlashMessage("Login form error", "error");
                 return;
             }
 
-            localStorage.setItem("accessToken", tokens.accessToken);
-            localStorage.setItem("refreshToken", tokens.refreshToken);
-            localStorage.setItem("user", JSON.stringify(user));
+            const email = emailEl.value.trim();
+            const password = passEl.value.trim();
 
-            this.user = user;
+            if (!email || !password) {
+                showFlashMessage("Email and password required", "error");
+                return;
+            }
 
-            // Show navbar after login
+            const res = await api.post("/auth/login", { email, password });
+            const data = res?.data || res;
+
+            if (!data?.tokens?.accessToken || !data?.tokens?.refreshToken) {
+                showFlashMessage("Authentication failed", "error");
+                return;
+            }
+
+            // 🔐 Store tokens (XSS-safe only because innerHTML is fixed)
+            localStorage.setItem("accessToken", data.tokens.accessToken);
+            localStorage.setItem("refreshToken", data.tokens.refreshToken);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            this.user = data.user;
+
             document.getElementById("main-navbar")?.classList.remove("hidden");
 
             window.showPage("dashboard-page");
             if (window.loadDashboard) await window.loadDashboard();
 
-            showFlashMessage("Login successful!", "success");
-        } catch (err) {
-            showFlashMessage(err.message || "Login failed", "error");
+            showFlashMessage("Login successful", "success");
+        } catch {
+            showFlashMessage("Invalid email or password", "error");
         }
     },
 
@@ -53,10 +64,25 @@ export const auth = {
     // ============================
     async signup() {
         try {
-            const fullName = document.getElementById("signup-name").value.trim();
-            const email = document.getElementById("signup-email").value.trim();
-            const password = document.getElementById("signup-password").value.trim();
-            const role = document.getElementById("signup-role").value;
+            const nameEl = document.getElementById("signup-name");
+            const emailEl = document.getElementById("signup-email");
+            const passEl = document.getElementById("signup-password");
+            const roleEl = document.getElementById("signup-role");
+
+            if (!nameEl || !emailEl || !passEl || !roleEl) {
+                showFlashMessage("Signup form error", "error");
+                return;
+            }
+
+            const fullName = nameEl.value.trim();
+            const email = emailEl.value.trim();
+            const password = passEl.value.trim();
+            const role = roleEl.value;
+
+            if (!fullName || !email || !password) {
+                showFlashMessage("All fields are required", "error");
+                return;
+            }
 
             const [firstName, ...rest] = fullName.split(" ");
             const lastName = rest.join(" ") || "User";
@@ -69,37 +95,29 @@ export const auth = {
                 role,
             });
 
-            showFlashMessage("Account created! Please login.", "success");
+            showFlashMessage("Account created. Please login.", "success");
             window.showPage("login-page");
-        } catch (err) {
-            showFlashMessage(err.message || "Signup failed", "error");
+        } catch {
+            showFlashMessage("Signup failed", "error");
         }
     },
 
     // ============================
-    // LOGOUT (FIXED & SECURE)
+    // LOGOUT (HARDENED)
     // ============================
     async logout() {
         try {
             const refreshToken = localStorage.getItem("refreshToken");
 
-            // Inform backend to invalidate refresh token
             if (refreshToken) {
-                await api.post(
-                    "/auth/logout",
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${refreshToken}`,
-                        },
-                    }
-                );
+                await api.post("/auth/logout", {
+                    refreshToken,
+                });
             }
-        } catch (err) {
-            console.warn("Backend logout failed, proceeding locally");
+        } catch {
+            // silent fail — logout must always succeed client-side
         }
 
-        // Clear session data
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("user");
@@ -107,10 +125,7 @@ export const auth = {
 
         this.user = null;
 
-        // Hide navbar after logout
         document.getElementById("main-navbar")?.classList.add("hidden");
-
-        // Redirect to landing / login
         window.showPage("landing-page");
 
         showFlashMessage("Logged out successfully", "success");
@@ -118,8 +133,8 @@ export const auth = {
 };
 
 // ============================
-// MAKE GLOBAL FOR INLINE HTML
+// GLOBAL EXPORTS
 // ============================
-window.login = (...args) => auth.login(...args);
-window.signup = (...args) => auth.signup(...args);
-window.logout = (...args) => auth.logout(...args);
+window.login = () => auth.login();
+window.signup = () => auth.signup();
+window.logout = () => auth.logout();

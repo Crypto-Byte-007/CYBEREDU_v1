@@ -29,26 +29,20 @@ class ApiService {
       headers.Authorization = `Bearer ${this.accessToken}`;
     }
 
-    try {
-      const response = await fetch(url, {
-        ...options,
-        headers,
-      });
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
 
-      // Access token expired
-      if (response.status === 401 && !options._retry) {
-        return this.handleUnauthorized(endpoint, options);
-      }
-
-      if (!response.ok) {
-        throw await this.handleError(response);
-      }
-
-      return response.status === 204 ? null : await response.json();
-    } catch (err) {
-      console.error("❌ API Request Failed:", err.message);
-      throw err;
+    if (response.status === 401 && !options._retry) {
+      return this.handleUnauthorized(endpoint, options);
     }
+
+    if (!response.ok) {
+      throw await this.handleError(response);
+    }
+
+    return response.status === 204 ? null : await response.json();
   }
 
   // ================================
@@ -64,10 +58,7 @@ class ApiService {
     this.isRefreshing = true;
 
     try {
-      const response = await this.refreshAccessToken();
-
-      // 🔥 FIX: backend sends tokens INSIDE data.tokens
-      const tokens = response.tokens;
+      const tokens = await this.refreshAccessToken();
 
       this.accessToken = tokens.accessToken;
       this.refreshToken = tokens.refreshToken;
@@ -75,12 +66,13 @@ class ApiService {
       localStorage.setItem("accessToken", this.accessToken);
       localStorage.setItem("refreshToken", this.refreshToken);
 
+      this.clearCache();
       this.processQueue();
 
       return this.request(endpoint, { ...options, _retry: true });
-    } catch (err) {
+    } catch {
       this.clearTokens();
-      showPage("landing-page");
+      if (window.showPage) window.showPage("landing-page");
       throw new Error("Session expired. Please login again.");
     } finally {
       this.isRefreshing = false;
@@ -88,7 +80,7 @@ class ApiService {
   }
 
   // ================================
-  // Refresh token
+  // Refresh token (SECURE)
   // ================================
   async refreshAccessToken() {
     if (!this.refreshToken) {
@@ -98,8 +90,11 @@ class ApiService {
     const response = await fetch(`${this.baseURL}/auth/refresh`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${this.refreshToken}`,
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        refreshToken: this.refreshToken,
+      }),
     });
 
     if (!response.ok) {
@@ -107,9 +102,7 @@ class ApiService {
     }
 
     const data = await response.json();
-
-    // 🔥 FIX: always return data.data
-    return data.data;
+    return data.data || data.tokens || data;
   }
 
   processQueue() {
@@ -139,23 +132,32 @@ class ApiService {
   clearTokens() {
     this.accessToken = null;
     this.refreshToken = null;
+    this.clearCache();
 
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
   }
 
+  clearCache() {
+    Object.values(this.cacheTimers).forEach(clearTimeout);
+    this.cache = {};
+    this.cacheTimers = {};
+  }
+
   // ================================
   // HTTP helpers + caching
   // ================================
   get(endpoint) {
-    if (this.cache[endpoint]) return Promise.resolve(this.cache[endpoint]);
+    if (this.cache[endpoint]) {
+      return Promise.resolve(this.cache[endpoint]);
+    }
 
     return this.request(endpoint, { method: "GET" }).then((data) => {
       this.cache[endpoint] = data;
       this.cacheTimers[endpoint] = setTimeout(() => {
         delete this.cache[endpoint];
-      }, 5000);
+      }, 3000);
       return data;
     });
   }
@@ -218,32 +220,3 @@ class ApiService {
 // ================================
 const api = new ApiService();
 export default api;
-
-// ================================
-// Legacy helpers (SAFE)
-// ================================
-export const loginAPI = async (email, password) => {
-  const res = await api.post("/auth/login", { email, password });
-
-  // 🔥 STORE TOKENS CORRECTLY
-  localStorage.setItem("accessToken", res.data.tokens.accessToken);
-  localStorage.setItem("refreshToken", res.data.tokens.refreshToken);
-  localStorage.setItem("user", JSON.stringify(res.data.user));
-
-  api.accessToken = res.data.tokens.accessToken;
-  api.refreshToken = res.data.tokens.refreshToken;
-
-  return res;
-};
-
-export const registerAPI = (data) =>
-  api.post("/auth/register", data);
-
-export const meAPI = () =>
-  api.get("/auth/me");
-
-export const fetchAllLabsAPI = () =>
-  api.get("/labs");
-
-export const submitReportAPI = (labId, payload) =>
-  api.post(`/reports/${labId}`, payload);
