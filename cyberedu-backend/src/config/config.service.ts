@@ -34,14 +34,16 @@ export class AppConfigService {
     };
   }
 
+  // 🔐 FIXED JWT CONFIG (V006 CLOSED)
   get jwt() {
     return {
-      secret: this.config.get<string>('jwt.secret')!,
-      accessExpiration: this.config.get<string>(
-        'jwt.accessExpiration',
+      accessSecret: this.config.get<string>('jwt.accessSecret')!,
+      refreshSecret: this.config.get<string>('jwt.refreshSecret')!,
+      accessExpiresIn: this.config.get<string>(
+        'jwt.accessExpiresIn',
       )!,
-      refreshExpiration: this.config.get<string>(
-        'jwt.refreshExpiration',
+      refreshExpiresIn: this.config.get<string>(
+        'jwt.refreshExpiresIn',
       )!,
     };
   }
