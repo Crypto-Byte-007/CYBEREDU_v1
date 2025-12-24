@@ -15,14 +15,6 @@ import { PasswordUtil } from '../common/utils/password.util';
 import { Tokens } from './interfaces/tokens.interface';
 import { AppConfigService } from '../config/config.service';
 
-interface AppJwtPayload {
-  sub: string;
-  email: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-}
-
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -137,7 +129,8 @@ export class AuthService {
 
   // ================= JWT HELPERS =================
   private async generateTokens(user: UserDocument): Promise<Tokens> {
-    const payload: AppJwtPayload = {
+    // ✅ Do NOT cast payload – let TS infer correctly
+    const accessPayload = {
       sub: user.id,
       email: user.email,
       role: user.role,
@@ -145,21 +138,17 @@ export class AuthService {
       lastName: user.lastName,
     };
 
-    // 🔐 ACCESS TOKEN
-    const accessToken = await this.jwtService.signAsync(
-      payload as Record<string, any>,
-      {
-        secret: this.configService.jwt.accessSecret,
-        expiresIn: this.configService.jwt.accessExpiresIn,
-      },
-    );
+    const accessToken = await this.jwtService.signAsync(accessPayload, {
+      secret: this.configService.jwt.accessSecret,
+      // ⚠️ TypeScript fix (NestJS typing quirk)
+      expiresIn: this.configService.jwt.accessExpiresIn as any,
+    });
 
-    // 🔐 REFRESH TOKEN (SEPARATE SECRET)
     const refreshToken = await this.jwtService.signAsync(
-      { sub: user.id } as Record<string, any>,
+      { sub: user.id },
       {
         secret: this.configService.jwt.refreshSecret,
-        expiresIn: this.configService.jwt.refreshExpiresIn,
+        expiresIn: this.configService.jwt.refreshExpiresIn as any,
       },
     );
 
