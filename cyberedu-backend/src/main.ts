@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
+
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/config.service';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
@@ -9,6 +11,18 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(AppConfigService);
+
+  /**
+   * =========================
+   * SECURITY HEADERS
+   * =========================
+   */
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // handled by frontend
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
 
   /**
    * =========================
@@ -46,34 +60,45 @@ async function bootstrap() {
 
   /**
    * =========================
-   * CORS CONFIGURATION
+   * CORS CONFIGURATION (SECURE)
    * =========================
-   * - Local frontend
-   * - Netlify frontend
    */
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:51442',
+    'https://nullcyberedu.netlify.app',
+  ];
+
   app.enableCors({
-    origin: [
-      'http://localhost:51442', // local frontend (serve)
-      'http://localhost:3000',  // optional local testing
-      'https://nullcyberedu.netlify.app', // 🔴 REPLACE THIS
-    ],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: (origin, callback) => {
+      // Allow server-to-server, curl, Postman
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'), false);
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Authorization', 'Content-Type'],
   });
 
   /**
    * =========================
    * START SERVER
    * =========================
-   * Railway injects PORT automatically
    */
   const port = configService.port || 3000;
   await app.listen(port);
 
   /**
    * =========================
-   * STARTUP LOG
+   * STARTUP LOG (SAFE)
    * =========================
    */
   console.log(`
