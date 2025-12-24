@@ -82,7 +82,7 @@ async function bootstrap() {
 ✅ Environment : ${configService.nodeEnv}
 ✅ API         : http://localhost:${port}${configService.apiPrefix}
 ✅ Health      : http://localhost:${port}${configService.apiPrefix}/health
-✅ Database    : ${configService.database.uri}
+✅ Database    : CONNECTED
 ✅ Auth        : JWT Ready
 ----------------------------------
   `);
