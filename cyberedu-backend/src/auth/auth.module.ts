@@ -9,32 +9,27 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 
 import { AppConfigService } from '../config/config.service';
+import { UsersModule } from '../users/users.module'; // ✅ IMPORTANT
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
-    /**
-     * JwtModule is used ONLY for ACCESS TOKENS
-     * Refresh tokens are signed manually in AuthService
-     */
+    // ✅ Gives access to UserModel
+    UsersModule,
+
     JwtModule.registerAsync({
       inject: [AppConfigService],
       useFactory: (config: AppConfigService): JwtModuleOptions => ({
         secret: config.jwt.accessSecret,
         signOptions: {
-          // ⚠️ TypeScript fix: Nest expects number | StringValue
           expiresIn: config.jwt.accessExpiresIn as any,
         },
       }),
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    RefreshTokenStrategy,
-  ],
+  providers: [AuthService, JwtStrategy, RefreshTokenStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
