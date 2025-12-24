@@ -43,7 +43,7 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
-    if (!PasswordUtil.validateStrength(dto.password)) {
+    if (!PasswordUtil.validateStrength(registerDto.password)) {
       throw new BadRequestException(
         'Password does not meet security requirements',
       );
