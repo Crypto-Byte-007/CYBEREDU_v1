@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppConfigService } from './config.service';
 import configuration from './configuration';
 
@@ -9,11 +9,14 @@ import configuration from './configuration';
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
-      envFilePath: ['.env'],
+
+      // ✅ In production, use Railway / cloud variables only
+      // ✅ In development, allow .env
       ignoreEnvFile: process.env.NODE_ENV === 'production',
+      envFilePath: '.env',
     }),
   ],
-  providers: [AppConfigService, ConfigService],
-  exports: [AppConfigService, ConfigService],
+  providers: [AppConfigService],
+  exports: [AppConfigService],
 })
 export class AppConfigModule {}
