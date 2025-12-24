@@ -33,56 +33,73 @@ export function loadProfile() {
 function renderActivityHeatmap(completedLabs) {
     const container = document.getElementById("activity-heatmap");
     if (!container) return;
-    
+
+    container.textContent = ""; // clear safely
+
     const weeks = 12;
     const days = weeks * 7;
-    let html = '';
-    
+    const colors = [
+        'rgba(30, 42, 71, 0.3)',
+        'rgba(0, 212, 255, 0.3)',
+        'rgba(0, 212, 255, 0.6)',
+        'rgba(0, 212, 255, 1)'
+    ];
+
     for (let i = days - 1; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
-        const dayStart = new Date(date.setHours(0, 0, 0, 0)).getTime();
-        const dayEnd = new Date(date.setHours(23, 59, 59, 999)).getTime();
-        
+
+        const dayStart = new Date(date.setHours(0,0,0,0)).getTime();
+        const dayEnd = new Date(date.setHours(23,59,59,999)).getTime();
+
         const count = completedLabs.filter(lab => {
-            const completedAt = lab.completedAt || Date.now();
+            const completedAt = Number(lab.completedAt) || 0;
             return completedAt >= dayStart && completedAt <= dayEnd;
         }).length;
-        
-        const intensity = count === 0 ? 0 : count === 1 ? 1 : count === 2 ? 2 : 3;
-        const colors = ['rgba(30, 42, 71, 0.3)', 'rgba(0, 212, 255, 0.3)', 'rgba(0, 212, 255, 0.6)', 'rgba(0, 212, 255, 1)'];
-        
-        html += `<div class="heat-cell" style="background: ${colors[intensity]}" title="${count} labs on ${date.toDateString()}"></div>`;
+
+        const intensity = Math.min(count, 3);
+
+        const cell = document.createElement("div");
+        cell.className = "heat-cell";
+        cell.style.background = colors[intensity];
+        cell.title = `${count} labs on ${date.toDateString()}`;
+
+        container.appendChild(cell);
     }
-    
-    container.innerHTML = html;
 }
+
 
 function renderAchievements(completedLabs) {
     const container = document.getElementById("profile-achievements");
     if (!container) return;
-    
+
+    container.textContent = "";
+
     const achievements = [
         { icon: '🎯', name: 'First Lab', unlocked: completedLabs.length >= 1 },
         { icon: '🔥', name: '5 Labs', unlocked: completedLabs.length >= 5 },
         { icon: '⭐', name: '10 Labs', unlocked: completedLabs.length >= 10 },
         { icon: '🏆', name: 'Expert', unlocked: completedLabs.length >= 20 }
     ];
-    
-    container.innerHTML = achievements.map(a => `
-        <div class="achievement-badge ${a.unlocked ? 'unlocked' : 'locked'}" style="
-            padding: 1rem;
-            background: ${a.unlocked ? 'linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(99, 102, 241, 0.2))' : 'rgba(30, 42, 71, 0.3)'};
-            border: 1px solid ${a.unlocked ? 'rgba(0, 212, 255, 0.5)' : 'rgba(30, 42, 71, 0.5)'};
-            border-radius: 8px;
-            text-align: center;
-            opacity: ${a.unlocked ? '1' : '0.4'};
-        ">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${a.icon}</div>
-            <div style="font-size: 0.8rem; color: #b8c5db;">${a.name}</div>
-        </div>
-    `).join('');
+
+    achievements.forEach(a => {
+        const badge = document.createElement("div");
+        badge.className = `achievement-badge ${a.unlocked ? 'unlocked' : 'locked'}`;
+        badge.style.opacity = a.unlocked ? '1' : '0.4';
+
+        const icon = document.createElement("div");
+        icon.textContent = a.icon;
+        icon.style.fontSize = "2rem";
+
+        const label = document.createElement("div");
+        label.textContent = a.name;
+        label.style.fontSize = "0.8rem";
+
+        badge.append(icon, label);
+        container.appendChild(badge);
+    });
 }
+
 
 export function saveProfile() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");

@@ -141,22 +141,46 @@ function renderSkillsChart(completedLabs) {
 function renderReportsTable(completedLabs) {
     const tbody = document.getElementById('reports-table');
     if (!tbody) return;
-    
+
+    tbody.textContent = "";
+
     if (completedLabs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #b8c5db;">No completed labs yet. Start learning to see your reports!</td></tr>';
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 6;
+        cell.textContent = "No completed labs yet.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
         return;
     }
-    
-    tbody.innerHTML = completedLabs.map(lab => `
-        <tr style="background: rgba(30, 42, 71, 0.3);">
-            <td style="color: #ffffff;">${lab.title}</td>
-            <td style="color: #b8c5db;">${formatDate(lab.completedAt)}</td>
-            <td><span class="score-badge ${getScoreClass(lab.score)}" style="background: rgba(0, 255, 136, 0.2); color: #00ff88; padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(0, 255, 136, 0.3);">${lab.score || 100}%</span></td>
-            <td style="color: #b8c5db;">${Math.floor(Math.random() * 30 + 15)} min</td>
-            <td><span class="status-badge completed" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff; padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(0, 212, 255, 0.3);">Completed</span></td>
-            <td><button class="btn-view" onclick="viewLabDetails('${lab.labId}')" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.3); padding: 6px 16px; border-radius: 6px; cursor: pointer;">View</button></td>
-        </tr>
-    `).join('');
+
+    completedLabs.forEach(lab => {
+        const row = document.createElement("tr");
+
+        const title = document.createElement("td");
+        title.textContent = lab.title || "Lab";
+
+        const date = document.createElement("td");
+        date.textContent = formatDate(lab.completedAt);
+
+        const score = document.createElement("td");
+        score.textContent = `${lab.score || 100}%`;
+
+        const time = document.createElement("td");
+        time.textContent = `${Math.floor(Math.random()*30+15)} min`;
+
+        const status = document.createElement("td");
+        status.textContent = "Completed";
+
+        const action = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "View";
+        btn.onclick = () => viewLabDetails(lab.labId);
+        action.appendChild(btn);
+
+        row.append(title, date, score, time, status, action);
+        tbody.appendChild(row);
+    });
 }
 
 function formatDate(timestamp) {
@@ -172,33 +196,28 @@ function getScoreClass(score) {
 }
 
 window.viewLabDetails = function(labId) {
-    const progress = JSON.parse(localStorage.getItem('userProgress') || '{"completedLabs": []}');
-    const lab = progress.completedLabs.find(l => l.labId === labId);
-    
+    const progress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+    const lab = progress.completedLabs?.find(l => l.labId === labId);
     if (!lab) return;
-    
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.style.display = 'flex';
-    modal.innerHTML = `
-        <div class="modal-content" style="max-width: 500px; background: rgba(20, 27, 45, 0.95);">
-            <div class="modal-header">
-                <h3 style="color: #ffffff;">Lab Details</h3>
-                <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
-            </div>
-            <div class="modal-body" style="color: #ffffff;">
-                <h4 style="color: #00d4ff;">${lab.title}</h4>
-                <div style="margin: 20px 0;">
-                    <p style="color: #b8c5db;"><strong style="color: #ffffff;">Score:</strong> <span class="score-badge ${getScoreClass(lab.score)}" style="background: rgba(0, 255, 136, 0.2); color: #00ff88; padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(0, 255, 136, 0.3);">${lab.score || 100}%</span></p>
-                    <p style="color: #b8c5db;"><strong style="color: #ffffff;">Completed:</strong> ${formatDate(lab.completedAt)}</p>
-                    <p style="color: #b8c5db;"><strong style="color: #ffffff;">Status:</strong> <span class="status-badge completed" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff; padding: 4px 12px; border-radius: 12px; border: 1px solid rgba(0, 212, 255, 0.3);">Completed</span></p>
-                </div>
-                <p style="color: #b8c5db;">Great job completing this lab! Keep up the good work.</p>
-            </div>
-        </div>
-    `;
+
+    const modal = document.createElement("div");
+    modal.className = "modal";
+    modal.style.display = "flex";
+
+    const content = document.createElement("div");
+    content.className = "modal-content";
+
+    const title = document.createElement("h3");
+    title.textContent = lab.title || "Lab Details";
+
+    const score = document.createElement("p");
+    score.textContent = `Score: ${lab.score || 100}%`;
+
+    content.append(title, score);
+    modal.appendChild(content);
     document.body.appendChild(modal);
 };
+
 
 window.generateReport = function() {
     const progress = JSON.parse(localStorage.getItem('userProgress') || '{"completedLabs": [], "totalPoints": 0}');
