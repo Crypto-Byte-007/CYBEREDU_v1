@@ -57,20 +57,56 @@ function renderRecentLabs(completedLabs) {
         return;
     }
 
-    container.innerHTML = inProgressLabs.map(lab => `
-        <div class="lab-card">
-            <div class="lab-card-header">
-                <h4>${lab.title || 'Lab'}</h4>
-                <span class="lab-difficulty ${lab.difficulty}">${lab.difficulty}</span>
-            </div>
-            <p>${(lab.description || 'Practice lab').substring(0, 80)}...</p>
-            <div class="lab-card-footer">
-                <span class="lab-points">🏆 ${lab.points || 100} pts</span>
-                <button onclick="startLab('${lab.labId}')" class="btn btn-primary">Start</button>
-            </div>
-        </div>
-    `).join("");
-}
+    container.innerHTML = ""; // clear safely
+
+    inProgressLabs.forEach((lab) => {
+        const card = document.createElement("div");
+        card.className = "lab-card";
+
+        // HEADER
+        const header = document.createElement("div");
+        header.className = "lab-card-header";
+
+        const title = document.createElement("h4");
+        title.textContent = lab.title || "Lab";
+
+        const difficulty = document.createElement("span");
+        difficulty.className = `lab-difficulty ${lab.difficulty || "beginner"}`;
+        difficulty.textContent = lab.difficulty || "Beginner";
+
+        header.appendChild(title);
+        header.appendChild(difficulty);
+
+        // DESCRIPTION
+        const description = document.createElement("p");
+        const descText = lab.description || "Practice lab";
+        description.textContent = descText.substring(0, 80) + "...";
+
+        // FOOTER
+        const footer = document.createElement("div");
+        footer.className = "lab-card-footer";
+
+        const points = document.createElement("span");
+        points.className = "lab-points";
+        points.textContent = `🏆 ${lab.points || 100} pts`;
+
+        const button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.textContent = "Start";
+
+        button.addEventListener("click", () => startLab(lab.labId));
+
+        footer.appendChild(points);
+        footer.appendChild(button);
+
+        // ASSEMBLE
+        card.appendChild(header);
+        card.appendChild(description);
+        card.appendChild(footer);
+
+        container.appendChild(card);
+    });
+
 
 function renderActivityFeed(completedLabs) {
     const container = document.getElementById("activity-feed");
@@ -82,16 +118,36 @@ function renderActivityFeed(completedLabs) {
     }
 
     const recentActivity = completedLabs.slice(-5).reverse();
-    container.innerHTML = recentActivity.map(lab => `
-        <div class="activity-item">
-            <div class="activity-icon">✓</div>
-            <div class="activity-content">
-                <p><strong>Completed:</strong> ${lab.title}</p>
-                <p class="activity-time">${formatTimeAgo(lab.completedAt)}</p>
-            </div>
-        </div>
-    `).join("");
-}
+    
+    container.innerHTML = ""; // clear safely
+
+    recentActivity.forEach((lab) => {
+        const item = document.createElement("div");
+        item.className = "activity-item";
+
+        const icon = document.createElement("div");
+        icon.className = "activity-icon";
+        icon.textContent = "✓";
+
+        const content = document.createElement("div");
+        content.className = "activity-content";
+
+        const title = document.createElement("p");
+        title.textContent = `Completed: ${lab.title || "Lab"}`;
+
+        const time = document.createElement("p");
+        time.className = "activity-time";
+        time.textContent = formatTimeAgo(lab.completedAt);
+
+        content.appendChild(title);
+        content.appendChild(time);
+
+        item.appendChild(icon);
+        item.appendChild(content);
+
+        container.appendChild(item);
+    });
+
 
 function formatTimeAgo(timestamp) {
     if (!timestamp) return 'Recently';

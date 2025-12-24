@@ -34,20 +34,62 @@ function renderLabList(labs) {
         return;
     }
 
-    container.innerHTML = labs.map(lab => `
-        <div class="lab-card" data-category="${lab.category || 'all'}" style="cursor: pointer;" onclick="startLab('${lab.labId}')">
-            <div class="lab-card-header">
-                <h3>${lab.title || 'Untitled Lab'}</h3>
-                <span class="lab-difficulty ${lab.difficulty || 'beginner'}">${lab.difficulty || 'Beginner'}</span>
-            </div>
-            <p>${lab.description || 'No description available'}</p>
-            <div class="lab-card-footer">
-                <span class="lab-time"><i class="fas fa-clock"></i> ${lab.estimatedTime || '30 min'}</span>
-                <button class="btn btn-primary" onclick="event.stopPropagation(); startLab('${lab.labId}')">Start Lab</button>
-            </div>
-        </div>
-    `).join("");
-}
+    container.innerHTML = ""; // clear container safely
+
+    labs.forEach((lab) => {
+        const card = document.createElement("div");
+        card.className = "lab-card";
+        card.style.cursor = "pointer";
+        card.dataset.category = lab.category || "all";
+
+        card.addEventListener("click", () => startLab(lab.labId));
+
+        // HEADER
+        const header = document.createElement("div");
+        header.className = "lab-card-header";
+
+        const title = document.createElement("h3");
+        title.textContent = lab.title || "Untitled Lab";
+
+        const difficulty = document.createElement("span");
+        difficulty.className = `lab-difficulty ${lab.difficulty || "beginner"}`;
+        difficulty.textContent = lab.difficulty || "Beginner";
+
+        header.appendChild(title);
+        header.appendChild(difficulty);
+
+        // DESCRIPTION
+        const description = document.createElement("p");
+        description.textContent = lab.description || "No description available";
+
+        // FOOTER
+        const footer = document.createElement("div");
+        footer.className = "lab-card-footer";
+
+        const time = document.createElement("span");
+        time.className = "lab-time";
+        time.textContent = `⏱ ${lab.estimatedTime || "30 min"}`;
+
+        const button = document.createElement("button");
+        button.className = "btn btn-primary";
+        button.textContent = "Start Lab";
+
+        button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        startLab(lab.labId);
+        });
+
+       footer.appendChild(time);
+       footer.appendChild(button);
+
+       // ASSEMBLE CARD
+       card.appendChild(header);
+       card.appendChild(description);
+       card.appendChild(footer);
+
+       container.appendChild(card);
+    });
+
 
 export async function startLab(labId) {
     currentLab = null;
