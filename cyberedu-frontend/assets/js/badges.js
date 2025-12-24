@@ -17,14 +17,28 @@ function unlockBadge(name, description = '') {
 function showBadgePopup(name, description) {
     const popup = document.createElement('div');
     popup.className = 'badge-popup';
-    popup.innerHTML = `
-        <div class="badge-content">
-            <div class="badge-icon">🏆</div>
-            <h3>Badge Unlocked!</h3>
-            <h4>${name}</h4>
-            <p>${description}</p>
-        </div>
-    `;
+    
+    const content = document.createElement('div');
+    content.className = 'badge-content';
+    
+    const icon = document.createElement('div');
+    icon.className = 'badge-icon';
+    icon.textContent = '🏆';
+    
+    const title = document.createElement('h3');
+    title.textContent = 'Badge Unlocked!';
+    
+    const badgeName = document.createElement('h4');
+    badgeName.textContent = name;
+    
+    const desc = document.createElement('p');
+    desc.textContent = description;
+    
+    content.appendChild(icon);
+    content.appendChild(title);
+    content.appendChild(badgeName);
+    content.appendChild(desc);
+    popup.appendChild(content);
     
     document.body.appendChild(popup);
     
@@ -40,9 +54,13 @@ function updateBadgeDisplay() {
     const container = document.getElementById('user-badges');
     
     if (container) {
-        container.innerHTML = badges.map(badge => 
-            `<span class="badge">${badge}</span>`
-        ).join('');
+        container.innerHTML = '';
+        badges.forEach(badge => {
+            const span = document.createElement('span');
+            span.className = 'badge';
+            span.textContent = badge;
+            container.appendChild(span);
+        });
     }
 }
 
@@ -56,15 +74,21 @@ const BADGES = {
     'Explorer': 'Try all available labs'
 };
 
+// Badge condition handlers
+const BADGE_HANDLERS = {
+    'lab_completed': (data) => {
+        if (data.isFirst) unlockBadge('First Lab', BADGES['First Lab']);
+        if (data.score === 100) unlockBadge('Perfect Score', BADGES['Perfect Score']);
+        if (data.timeMinutes < 30) unlockBadge('Speed Runner', BADGES['Speed Runner']);
+    },
+    'hint_used': () => {
+        unlockBadge('Helper', BADGES['Helper']);
+    }
+};
+
 function checkBadgeConditions(event, data) {
-    switch (event) {
-        case 'lab_completed':
-            if (data.isFirst) unlockBadge('First Lab', BADGES['First Lab']);
-            if (data.score === 100) unlockBadge('Perfect Score', BADGES['Perfect Score']);
-            if (data.timeMinutes < 30) unlockBadge('Speed Runner', BADGES['Speed Runner']);
-            break;
-        case 'hint_used':
-            unlockBadge('Helper', BADGES['Helper']);
-            break;
+    const handler = BADGE_HANDLERS[event];
+    if (handler) {
+        handler(data);
     }
 }

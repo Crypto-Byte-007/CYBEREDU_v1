@@ -1,16 +1,25 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 async function createAdmin() {
   try {
+    // Validate required environment variables
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/cyberedu';
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    
+    if (!adminPassword) {
+      throw new Error('ADMIN_PASSWORD environment variable is required');
+    }
+
     // Connect to MongoDB
-    await mongoose.connect('mongodb://localhost:27017/cyberedu', {
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
     // Hash password
-    const hashedPassword = await bcrypt.hash('AdminPass123!', 10);
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     // Create admin user
     const User = mongoose.model('User', new mongoose.Schema({
@@ -42,7 +51,7 @@ async function createAdmin() {
     await adminUser.save();
     console.log('✅ Admin user created successfully!');
     console.log('Email: admin@cyberedu.com');
-    console.log('Password: AdminPass123!');
+    console.log('Password: [REDACTED - Check ADMIN_PASSWORD env var]');
     
     await mongoose.disconnect();
   } catch (error) {

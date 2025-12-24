@@ -5,7 +5,7 @@ async function createTestUser() {
   try {
     await mongoose.connect('mongodb://localhost:27017/cyberedu');
 
-    const hashedPassword = await bcrypt.hash('Test1234', 10);
+    const hashedPassword = await bcrypt.hash(process.env.TEST_PASSWORD || 'Test1234', 10);
 
     const User = mongoose.model('User', new mongoose.Schema({
       email: String,
@@ -36,7 +36,7 @@ async function createTestUser() {
     await testUser.save();
     console.log('✅ Test user created!');
     console.log('Email: test@example.com');
-    console.log('Password: Test1234');
+    console.log('Password: [Set via TEST_PASSWORD env var or default]');
     
     await mongoose.disconnect();
   } catch (error) {

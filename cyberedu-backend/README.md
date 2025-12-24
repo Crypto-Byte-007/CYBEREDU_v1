@@ -89,7 +89,7 @@ Content-Type: application/json
 
 {
   "email": "student@example.com",
-  "password": "SecurePass123!",
+  "password": "[YOUR_SECURE_PASSWORD]",
   "firstName": "John",
   "lastName": "Doe",
   "role": "student"
@@ -114,8 +114,8 @@ POST /api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "student@test.com",
-  "password": "Student123"
+  "email": "user@example.com",
+  "password": "[YOUR_PASSWORD]"
 }
 
 Response: 200 OK
@@ -124,9 +124,9 @@ Response: 200 OK
   "data": {
     "user": {
       "id": "...",
-      "email": "student@test.com",
-      "firstName": "Test",
-      "lastName": "Student",
+      "email": "user@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
       "role": "student"
     },
     "tokens": {
@@ -160,9 +160,9 @@ Authorization: Bearer <access_token>
 Response: 200 OK
 {
   "id": "...",
-  "email": "student@test.com",
-  "firstName": "Test",
-  "lastName": "Student",
+  "email": "user@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
   "role": "student"
 }
 ```
@@ -391,7 +391,7 @@ API_PREFIX=/api/v1
 MONGODB_URI=mongodb://localhost:27017/cyberedu
 
 # JWT Configuration
-JWT_SECRET=your_super_secret_key_change_this_in_production_min_32_chars
+JWT_SECRET=[GENERATE_RANDOM_SECRET_MIN_32_CHARS]
 JWT_ACCESS_EXPIRATION=15m
 JWT_REFRESH_EXPIRATION=7d
 
@@ -498,12 +498,12 @@ npm run start:dev
 # Register
 curl -X POST http://localhost:3000/api/v1/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"Test123!","firstName":"Test","lastName":"User","role":"student"}'
+  -d '{"email":"[YOUR_EMAIL]","password":"[YOUR_SECURE_PASSWORD]","firstName":"[FIRST_NAME]","lastName":"[LAST_NAME]","role":"student"}'
 
 # Login
 curl -X POST http://localhost:3000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"student@test.com","password":"Student123"}'
+  -d '{"email":"[YOUR_EMAIL]","password":"[YOUR_PASSWORD]"}'
 
 # Get Labs (with token)
 curl -X GET http://localhost:3000/api/v1/labs \
@@ -652,7 +652,7 @@ heroku create cyberedu-api
 # Set environment variables
 heroku config:set NODE_ENV=production
 heroku config:set MONGODB_URI=mongodb+srv://...
-heroku config:set JWT_SECRET=your_secret
+heroku config:set JWT_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
 
 # Deploy
 git push heroku main
