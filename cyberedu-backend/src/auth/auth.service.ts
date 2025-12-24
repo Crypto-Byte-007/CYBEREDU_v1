@@ -43,9 +43,9 @@ export class AuthService {
       throw new ConflictException('User with this email already exists');
     }
 
-    if (!PasswordUtil.validateStrength(registerDto.password)) {
+    if (!PasswordUtil.validateStrength(dto.password)) {
       throw new BadRequestException(
-        'Password must be at least 8 characters long and include uppercase, lowercase and a number',
+        'Password does not meet security requirements',
       );
     }
 
